@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<html>
+	<head>
+		
+		
+	</head>
+	<body> <a href="/" title="Home"><h1>MynKart</h1></a>
+		<input type="text" id="book" onkeyup="auto()"/>
+		<div id="books-list">
+		</div>
+	</body>
+	<script type="text/javascript" src="{% static "js/movies/jquery-1.11.1.min.js" %}">
+	</script>
+	<script>
+			
+			function auto()
+					{
+						var letters = /^[A-Za-z]+$/;
+						var book = document.getElementById('book');
+						if(book.value.match(letters))
+						$.post('http://127.0.0.1:8080/books/search_info/', {'term': book.value})
+						.done(function(data)
+						{
+							//alert(data.response[0].title);
+							if(data != undefined)
+							{
+								var html = '';
+								for(i=0; i<data.response.length; i++)
+									html += "<li><a href='/books/book=" + data.response[i].title + "'>" + data.response[i].title + "</a></li><br>";
+								document.getElementById('books-list').innerHTML = html;
+							}
+						})
+					}
+		</script>
+</html>
+
+
+<h1>My Awesome Book Collection</h1>
+{% if books_list %}
+<ul>
+{% for b in books_list %}
+    <li>
+<a href="/books/book={{b.title}}/">{{b.title}}</a>  | {{b.author}} | Rs. {{b.rate}}</li>
+{% endfor %}
+</ul>
+{% endif %}

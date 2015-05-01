@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<html>
+	<head>
+		
+		
+	</head>
+	<body>  <a href="/" title="Home"><h1>MynKart</h1></a>
+		Search:<input type="text" id="movie" onkeyup="auto()"/>
+		<div id="movies-list">
+		</div>
+	</body>
+	<script type="text/javascript" src="{% static "js/movies/jquery-1.11.1.min.js" %}">
+	</script>
+	<script>
+			
+			function auto()
+					{
+						var letters = /^[A-Za-z]+$/;
+						var movie = document.getElementById('movie');
+						if(movie.value.match(letters))
+						$.post('http://127.0.0.1:8080/movies/search_info/', {'term': movie.value})
+						.done(function(data)
+						{
+							//alert(data.response[0].title);
+							if(data != undefined)
+							{
+								var html = '';
+								for(i=0; i<data.response.length; i++)
+									html += "<li><a href='/movies/movie=" + data.response[i].title + "'>" + data.response[i].title + "</a></li><br>";
+								document.getElementById('movies-list').innerHTML = html;
+							}
+						})
+					}
+		</script>
+</html>
+<h1>Super Movie Collection</h1>
+{% if movies_list %}
+<ul>
+{% for m in movies_list %}
+    <li><a href="/movies/movie={{m.title}}/">{{m.title}}</a>  | {{m.director}} | {{m.cast}} | Rs. {{m.price}}</li>
+{% endfor %}
+</ul>
+{% endif %}

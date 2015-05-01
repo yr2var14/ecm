@@ -1,0 +1,32 @@
+
+
+# Create your views here.
+
+from django.http import HttpResponse, JsonResponse
+from movies.models import Movies
+from books.models import Books
+from django.template import Context, loader
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
+
+
+def search(request):
+    return render(request, 'main/mainpage.html')
+
+@csrf_exempt
+def search_info(request):
+    post = request.POST
+    data = {}
+    data['response'] = list(Movies.objects.filter(title__istartswith = post['term']).values())
+    return JsonResponse(data)
+
+@csrf_exempt
+def search_info(request):
+    post = request.POST
+    data = {}
+    data['response'] = list(Books.objects.filter(title__istartswith = post['term']).values())
+    return JsonResponse(data)
+
+
+

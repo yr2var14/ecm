@@ -1,0 +1,8 @@
+<h1>Super Movie Collection</h1>
+{% if movies_list %}
+<ul>
+{% for m in movies_list %}
+    <li><a href="http://127.0.0.1:8000/movies/two.html/">{{m.title}}</a>  | {{m.director}} | {{m.cast}} | {{m.price}}</li>
+{% endfor %}
+</ul>
+{% endif %}

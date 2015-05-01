@@ -1,0 +1,136 @@
+<html>
+<head><title>MynKart</title>
+
+<style type="text/css">
+	
+	h1 {
+		position:absoute;
+		text-align:center;
+		background-color:red;
+		padding:10px;
+		border-width:4px;
+	}
+	table{
+		text-align:center;
+		text-color:blue;
+		align:centre ;
+		}
+		
+	body {	
+		background-color:#333000;
+		background-repeat:no-repeat;
+	}
+
+	img {height:300px;
+		width:300px;}
+	
+	a:link{color:black;
+		text-decoration:none;
+	}
+	a:visited{color:yellow;}
+	a:hover{
+			color:blue;
+			text-decoration:underline;
+			font-weight:bold;
+			}
+	a:active{color:blue;}
+	
+	#search{
+	    position:absolute;
+	    align:center;
+	    right:50%;}
+	#term{
+	    position:absolute;
+	    align:center;
+	    left:50%;
+	    right:50%;
+	    }
+	#books-list{
+	    position:relative;
+	    left:50%;
+            right:50%;
+	    }
+	#movies-list{position:relative;
+	    left:50%;
+	    right:50%;
+	   }
+
+</style>
+
+</head>                       
+
+<body> <a href="/" title="Home"><h1>MynKart</h1></a>
+<table width="100%" cellpadding="10" cellspacing="5">
+	<tr>
+		<td><a href="/movies" title="awesome movies">Movies</a></td>
+		<td><a href="/books" title="best books">Books</a></td>
+		
+	</tr>
+ </table>
+{% load staticfiles %}
+
+	<body>
+		<div id="search"><p>Search:</p></div><br /><br /><input type="text" id="term" onkeyup="auto()"/><br /><br />
+		<div id="books-list">
+		</div><div id="movies-list">
+		</div>
+	</body>
+	<script type="text/javascript" src="{% static "js/movies/jquery-1.11.1.min.js" %}">
+	</script>
+	<script>
+			
+			function auto()
+					{
+						var letters = /^[A-Za-z]+$/;
+						var term = document.getElementById('term');
+						document.getElementById('movies-list').innerHTML = '';
+						document.getElementById('books-list').innerHTML = '';
+						if(term.value.match(letters))
+						$.post('http://127.0.0.1:8080/books/search_info/', {'term': term.value})
+						.done(function(data)
+						{
+							//alert(data.response[0].title);
+							if(data != undefined)
+							{
+								var html = '';
+								for(i=0; i<data.response.length; i++)
+									html += "<li><a href='/books/book=" + data.response[i].title + "'>" + data.response[i].title + "</a></li><br>";
+								document.getElementById('books-list').innerHTML = html;
+							}
+						})
+						if(term.value.match(letters))
+						$.post('http://127.0.0.1:8080/movies/search_info/', {'term': term.value})
+						.done(function(data)
+						{
+							//alert(data.response[0].title);
+							if(data != undefined)
+							{
+								var html = '';
+								for(i=0; i<data.response.length; i++)
+									html += "<li><a href='/movies/movie=" + data.response[i].title + "'>" + data.response[i].title + "</a></li><br>";
+								document.getElementById('movies-list').innerHTML = html;
+							}
+						})
+					}
+		</script>
+
+
+
+<table width="100%" cellpadding="10" cellspacing="5">
+	<tr>
+		<td><a href="/movies" title="awesome movies"><img src="{%static "images/1.jpg" %}" /></a>
+		<br/>
+		<a href="/movies" title="awesome movies"><h3>Movies</h3></a>
+		</td>
+		<td><a href="/books" title="best books"><img src="{%static "images/books.jpg" %}%/></a>
+		<br/>
+		<a href="/books" title="best books"><h3>Books</h3></a>
+		</td>
+	</tr>
+ </table>
+
+
+
+
+</body>
+</html>
